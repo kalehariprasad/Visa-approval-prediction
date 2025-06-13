@@ -1,7 +1,6 @@
-Visa-prediction
+# Visa-aproval-Prediction
 ==============================
 
-# US-Visa-Prediction
 
 ## Project overview
 

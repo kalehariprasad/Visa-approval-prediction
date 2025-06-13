@@ -91,3 +91,8 @@ target/
 # Exclude environment 
 /visa/
 
+# 
+notebooks\.env
+
+
+
