@@ -19,3 +19,7 @@ scikit-learn
 imblearn
 xgboost
 catboost
+mlflow
+dvc
+dagshub
+flake8
