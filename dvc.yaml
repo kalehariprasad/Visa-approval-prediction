@@ -1,0 +1,11 @@
+stages:
+  data_injection:
+    cmd: python src/data/data_injection.py
+    deps:
+      - src/data/data_injection.py
+      - src/constants/__init__.py
+      - src/configuration/config.py
+      - src/logger/__init__.py
+      - src/exception/__init__.py
+    outs:
+      - data/raw

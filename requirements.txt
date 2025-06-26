@@ -21,5 +21,6 @@ xgboost
 catboost
 mlflow
 dvc
+dvc_gdrive
 dagshub
 flake8
