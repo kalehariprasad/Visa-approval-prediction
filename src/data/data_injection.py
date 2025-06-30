@@ -24,6 +24,7 @@ class DataInjection:
             artifacts = self.artifact
           
             df = pd.DataFrame(list(db.collection.find()))
+            df.drop(columns='_id',inplace=True)
             
             train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
             data.save_data(df, artifacts.raw_file_path)

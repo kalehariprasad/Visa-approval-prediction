@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -16,3 +17,7 @@ RAW_DATA_FILE = "Easyvisa.csv"
 RAW_TRAIN_FILE= "train.csv"
 RAW_TEST_FILE= "test.csv"
 
+# data validation related constant
+
+DATA_VALIDATION_FOLDER="data_validation"
+SCHEMA_FILE_PATH = os.path.join("config", "schema.yaml")
