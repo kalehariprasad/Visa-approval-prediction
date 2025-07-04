@@ -21,3 +21,19 @@ RAW_TEST_FILE= "test.csv"
 
 DATA_VALIDATION_FOLDER="data_validation"
 SCHEMA_FILE_PATH = os.path.join("config", "schema.yaml")
+
+
+# date transfromation realetd constants
+
+DATA_PREPROCESSING_FOLDER = "preprocessed" 
+PREPROCESSED_TRAIN = "train.csv"
+PREPROCESSED_TEST = "test.csv"
+PREPROCESSOR_OBJECT = "preprocessor.pkl"
+
+
+#features 
+FEATURE_FOLDER = 'festures'
+TRAIN_X = 'train_x.npy'
+TRAIN_Y = 'train_y.npy'
+TEST_X ='test_x.npy'
+TEST_Y = 'test_y'

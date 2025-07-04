@@ -27,3 +27,30 @@ categorical_columns:
   - unit_of_wage
   - full_time_position
   - case_status
+
+
+# data preprocessing
+drop_columns:
+  - case_id
+
+target_column: case_status
+
+
+transform_features:
+  - company_age
+  - no_of_employees
+
+num_features:
+  - prevailing_wage
+  - company_age
+
+one_hot_encoding_columns:
+  - has_job_experience
+  - requires_job_training
+  - full_time_position
+  - education_of_employee
+
+Ordinal_encoding_columns:
+  - continent
+  - unit_of_wage
+  - region_of_employment

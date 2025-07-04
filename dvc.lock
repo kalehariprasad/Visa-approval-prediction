@@ -5,12 +5,12 @@ stages:
     deps:
     - path: src/configuration/config.py
       hash: md5
-      md5: 028c0738bc32aab9ae1e36d6d6faaeba
-      size: 1005
+      md5: 0549c6b17b06b8005e4bbc7dc2fa25c7
+      size: 1864
     - path: src/constants/__init__.py
       hash: md5
-      md5: 321b2cd99c6160bbe5de86980cca6382
-      size: 555
+      md5: 77f959ffd046f85f84539d2b623b176a
+      size: 893
     - path: src/data/data_injection.py
       hash: md5
       md5: 55045365a5d8d486fde12dc19b62b02d
@@ -26,20 +26,24 @@ stages:
     outs:
     - path: data/raw/
       hash: md5
-      md5: 9cc5ae17ca9305e0c2e706c6c4a90c77.dir
+      md5: 69b4289cc391bcad8dd079fca9d510b2.dir
       size: 3762869
       nfiles: 3
   data_validation:
     cmd: python src/data/data_validation.py
     deps:
+    - path: config/schema.yaml
+      hash: md5
+      md5: 82965c056522ae0abf2b39430828e7eb
+      size: 1084
     - path: src/configuration/config.py
       hash: md5
-      md5: 028c0738bc32aab9ae1e36d6d6faaeba
-      size: 1005
+      md5: 0549c6b17b06b8005e4bbc7dc2fa25c7
+      size: 1864
     - path: src/constants/__init__.py
       hash: md5
-      md5: 321b2cd99c6160bbe5de86980cca6382
-      size: 555
+      md5: 77f959ffd046f85f84539d2b623b176a
+      size: 893
     - path: src/data/data_injection.py
       hash: md5
       md5: 55045365a5d8d486fde12dc19b62b02d
@@ -59,6 +63,47 @@ stages:
     outs:
     - path: data/data_validation/
       hash: md5
-      md5: 1cc3e545b0b10198926688177cb485ce.dir
+      md5: a6aff12d7958d54500d097b649b8ea3e.dir
       size: 29
       nfiles: 1
+  data_transformation:
+    cmd: python src/data/data_preprocessing.py
+    deps:
+    - path: config/schema.yaml
+      hash: md5
+      md5: 82965c056522ae0abf2b39430828e7eb
+      size: 1084
+    - path: src/configuration/config.py
+      hash: md5
+      md5: 0549c6b17b06b8005e4bbc7dc2fa25c7
+      size: 1864
+    - path: src/constants/__init__.py
+      hash: md5
+      md5: 77f959ffd046f85f84539d2b623b176a
+      size: 893
+    - path: src/data/data_injection.py
+      hash: md5
+      md5: 55045365a5d8d486fde12dc19b62b02d
+      size: 1532
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: 0c106b73e3b97577e5e653f4af4f6cf1
+      size: 5579
+    - path: src/data/data_validation.py
+      hash: md5
+      md5: 8e9e338420236544c0e59e89c69116c9
+      size: 5983
+    - path: src/exception/__init__.py
+      hash: md5
+      md5: 702ffdb8b43775375d093b1eedce434b
+      size: 928
+    - path: src/logger/__init__.py
+      hash: md5
+      md5: 7441f85fc83a7148bdf9ed90e60f3a60
+      size: 584
+    outs:
+    - path: data/preprocessed/
+      hash: md5
+      md5: 76068469b2a9e4309ee4da7ded1ceee7.dir
+      size: 1366177
+      nfiles: 3

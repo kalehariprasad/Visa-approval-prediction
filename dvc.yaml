@@ -19,8 +19,25 @@ stages:
       - src/configuration/config.py
       - src/logger/__init__.py
       - src/exception/__init__.py
+      - config/schema.yaml
     outs:
       - data/data_validation/
+
+  data_transformation:
+    cmd: python src/data/data_preprocessing.py
+
+    deps:
+      - src/data/data_preprocessing.py
+      - src/data/data_validation.py
+      - src/data/data_injection.py
+      - src/constants/__init__.py
+      - src/configuration/config.py
+      - src/logger/__init__.py
+      - src/exception/__init__.py
+      - config/schema.yaml
+    outs:
+      - data/preprocessed/
+     
 
  
 
