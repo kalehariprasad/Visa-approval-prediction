@@ -1,5 +1,6 @@
 import os
 import sys
+import mlflow.sklearn
 import yaml
 import joblib
 import pandas as pd
@@ -7,8 +8,13 @@ import numpy as np
 from datetime import date
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PowerTransformer
+import mlflow
+import mlflow.sklearn
+import dagshub
 from src.logger import logging
 from src.exception import CustomException
+from sklearn.metrics import accuracy_score, classification_report,ConfusionMatrixDisplay, \
+                            precision_score, recall_score, f1_score, roc_auc_score,roc_curve 
 
 
 
@@ -138,3 +144,58 @@ class Preprocessing:
         except Exception as e:
             raise CustomException(e,sys)
         
+class Model:
+    def __init__(self):
+        pass
+
+    def train_model(self, model_class, train_x, train_y, params: dict):
+        try:
+            mlflow.set_experiment("production")
+            with mlflow.start_run(run_name='model_training'):
+                logging.info(f"train_y array type: {type(train_y)} shape: {train_y.shape}")
+                
+                train_y = train_y.ravel()
+
+                logging.info(f"train_y array type: {type(train_x)} shape: {train_x.shape}")
+                logging.info(f"train_y array type: {type(train_y)} shape: {train_y.shape}")
+                model = model_class(**params)
+                model.fit(train_x, train_y)
+                
+                # Log hyperparameters
+                for key, value in params.items():
+                    mlflow.log_param(key, value)
+                
+                # Log the trained model
+                #mlflow.sklearn.log_model(model, "model")
+
+            return model
+        except Exception as e:
+            raise CustomException(e, sys)
+
+    def evaluate_model(self, model, test_x, test_y):
+        try:
+            with mlflow.start_run(run_name='model_evaluation'):
+                predicted = model.predict(test_x)
+                acc = accuracy_score(test_y, predicted)
+                mlflow.log_metric('accuracy', acc)
+                
+                f1 = f1_score(test_y, predicted)
+                mlflow.log_metric('f1_score', f1)
+                
+                precision = precision_score(test_y, predicted)
+                mlflow.log_metric('precision', precision)
+                
+                recall = recall_score(test_y, predicted)
+                mlflow.log_metric('recall', recall)
+                
+                roc_auc = roc_auc_score(test_y, predicted)
+                mlflow.log_metric('roc_auc', roc_auc)
+                
+                report = classification_report(test_y, predicted)
+                with open("report.txt", "w") as f:
+                    f.write(report)
+                mlflow.log_artifact("report.txt")
+
+            return report
+        except Exception as e:
+            raise CustomException(e, sys)   

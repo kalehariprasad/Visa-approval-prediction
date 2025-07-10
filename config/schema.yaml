@@ -42,7 +42,6 @@ transform_features:
 
 num_features:
   - prevailing_wage
-  - company_age
 
 one_hot_encoding_columns:
   - has_job_experience

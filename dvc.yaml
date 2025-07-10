@@ -37,7 +37,20 @@ stages:
       - config/schema.yaml
     outs:
       - data/preprocessed/
-     
+  model_training:
+    cmd: python src/models/model_training.py
+
+    deps:
+      - src/models/model_training.py
+      - src/data/data_preprocessing.py
+      - src/data/data_validation.py
+      - src/data/data_injection.py
+      - src/constants/__init__.py
+      - src/configuration/config.py
+      - src/logger/__init__.py
+      - src/exception/__init__.py
+      - config/schema.yaml
+  
 
  
 
