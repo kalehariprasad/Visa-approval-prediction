@@ -144,5 +144,5 @@ stages:
       size: 584
     - path: src/models/model_training.py
       hash: md5
-      md5: 594502eb5a5a186cf66bba7100f59944
-      size: 1922
+      md5: 08d6288a49a00577d067c4e693937ec1
+      size: 1820

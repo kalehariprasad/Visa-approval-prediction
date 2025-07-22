@@ -10,8 +10,8 @@ from src.configuration.config import DataPreprocessconfig
 from sklearn.neighbors import KNeighborsClassifier
 
 
-mlflow.set_tracking_uri("https://dagshub.com/kalehariprasad/Visa-approval-prediction.mlflow")
-dagshub.init(repo_owner='kalehariprasad', repo_name='Visa-approval-prediction', mlflow=True)
+mlflow.set_tracking_uri("http://ec2-54-173-113-213.compute-1.amazonaws.com:5000//")
+
 
 class Modeling:
     def __init__(self):

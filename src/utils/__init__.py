@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PowerTransformer
 import mlflow
 import mlflow.sklearn
+from mlflow.models.signature import infer_signature
 import dagshub
 from src.logger import logging
 from src.exception import CustomException
@@ -164,11 +165,20 @@ class Model:
                 # Log hyperparameters
                 for key, value in params.items():
                     mlflow.log_param(key, value)
+
+                # Infer model input/output signature
+                predictions = model.predict(train_x)
+                signature = infer_signature(train_x, predictions)
                 
                 # Log the trained model
-                #mlflow.sklearn.log_model(model, "model")
+                mlflow.sklearn.log_model(
+                    sk_model=model,
+                    name="model",
+                    signature=signature,
+                    input_example=train_x.iloc[:5] if hasattr(train_x, 'iloc') else train_x[:5]
+                )
 
-            return model
+            return model 
         except Exception as e:
             raise CustomException(e, sys)
 
