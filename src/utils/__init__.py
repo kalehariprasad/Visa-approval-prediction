@@ -3,6 +3,8 @@ import sys
 import mlflow.sklearn
 import yaml
 import joblib
+import json
+from typing import Dict
 import pandas as pd
 import numpy as np
 from datetime import date
@@ -14,6 +16,7 @@ from mlflow.models.signature import infer_signature
 import dagshub
 from src.logger import logging
 from src.exception import CustomException
+from src.configuration.config import ModelConfig
 from sklearn.metrics import accuracy_score, classification_report,ConfusionMatrixDisplay, \
                             precision_score, recall_score, f1_score, roc_auc_score,roc_curve 
 
@@ -104,6 +107,22 @@ class DataHandler:
             return np.load(file_path)
         except Exception as e:
             raise CustomException(e, sys)
+        
+    def save_json(self, data: dict, file_path: str):
+        try:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "w") as f:
+                json.dump(data, f, indent=4)
+        except Exception as e:
+            raise CustomException(e, sys)
+        
+    def save_txt(self, text: str, file_path: str):
+        try:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(text)
+        except Exception as e:
+            raise CustomException(e, sys)
 
 
 class Preprocessing:
@@ -147,12 +166,17 @@ class Preprocessing:
         
 class Model:
     def __init__(self):
-        pass
+     
+        self.model_config = ModelConfig()
+        self.handler = DataHandler()
+        self.mlflow = MLFlowInstance()
+
+
 
     def train_model(self, model_class, train_x, train_y, params: dict):
         try:
             mlflow.set_experiment("production")
-            with mlflow.start_run(run_name='model_training'):
+            with mlflow.start_run(run_name='model_training') as run:
                 logging.info(f"train_y array type: {type(train_y)} shape: {train_y.shape}")
                 
                 train_y = train_y.ravel()
@@ -173,39 +197,117 @@ class Model:
                 # Log the trained model
                 mlflow.sklearn.log_model(
                     sk_model=model,
-                    name="model",
+                    artifact_path="model",
                     signature=signature,
                     input_example=train_x.iloc[:5] if hasattr(train_x, 'iloc') else train_x[:5]
                 )
+                training_run_id = run.info.run_id
 
-            return model 
+            return model,training_run_id
         except Exception as e:
             raise CustomException(e, sys)
 
-    def evaluate_model(self, model, test_x, test_y):
+    def evaluate_model(self, model, test_x, test_y,training_run_id):
         try:
-            with mlflow.start_run(run_name='model_evaluation'):
+            
+
+            with mlflow.start_run(run_name='model_evaluation') as run:
                 predicted = model.predict(test_x)
                 acc = accuracy_score(test_y, predicted)
-                mlflow.log_metric('accuracy', acc)
-                
                 f1 = f1_score(test_y, predicted)
-                mlflow.log_metric('f1_score', f1)
-                
                 precision = precision_score(test_y, predicted)
-                mlflow.log_metric('precision', precision)
-                
                 recall = recall_score(test_y, predicted)
-                mlflow.log_metric('recall', recall)
-                
                 roc_auc = roc_auc_score(test_y, predicted)
-                mlflow.log_metric('roc_auc', roc_auc)
-                
-                report = classification_report(test_y, predicted)
-                with open("report.txt", "w") as f:
-                    f.write(report)
-                mlflow.log_artifact("report.txt")
 
-            return report
+                # Log metrics
+                mlflow.log_metrics({
+                    'accuracy': acc,
+                    'f1_score': f1,
+                    'precision': precision,
+                    'recall': recall,
+                    'roc_auc': roc_auc
+                })
+
+                # Classification report
+                report_dict = classification_report(test_y, predicted, output_dict=True)
+                report_txt = classification_report(test_y, predicted)
+
+                # Save report
+                self.handler.save_json(report_dict, self.model_config.repost_json)
+                self.handler.save_txt(report_txt, self.model_config.repost_txt)
+
+                # Log artifacts
+                mlflow.log_artifact(self.model_config.repost_json)
+                mlflow.log_artifact(self.model_config.repost_txt)
+
+                # Save run info
+                run_id = training_run_id
+                model_name = self.model_config.model_name
+                model_path = self.model_config.model_artifact_path
+                model_info_path = self.model_config.model_experiment_info
+                self.mlflow.save_model_info(run_id=run_id,model_name=model_name, model_path=model_path,file_path = model_info_path)
+            return report_dict
         except Exception as e:
-            raise CustomException(e, sys)   
+            raise CustomException(e, sys)
+        
+class MLFlowInstance:
+    def __init__(self):
+        pass
+    def save_model_info(
+        self, run_id: str, model_path: str, file_path: str, model_name: str
+    ) -> None:
+        """Save the model run ID, path, URI, and name to a JSON file."""
+        try:
+            model_uri = f"runs:/{run_id}/{model_path}"
+            model_info = {
+                'run_id': run_id,
+                'model_path': model_path,
+                'model_uri': model_uri,
+                'model_name': model_name
+            }
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, 'w') as file:
+                json.dump(model_info, file, indent=4)
+
+            logging.info(f"Model info saved to {file_path}")
+
+        except Exception as e:
+            logging.error('Error occurred while saving the model info: %s', e, exc_info=True)
+            raise CustomException(e, sys)
+
+
+    def load_model_info(self,file_path: str) -> Dict[str, str]:
+        """Load model run ID and path from a JSON file."""
+        try:
+            with open(file_path, 'r') as file:
+                model_info = json.load(file)
+            logging.info('Model info loaded from %s', file_path)
+            return model_info  # Contains keys: 'run_id', 'model_path' , 'model_uri'
+        except Exception as e:
+            logging.error('Error occurred while loading the model info: %s', e)
+            raise CustomException(e, sys)
+    
+    def register_model(self, model_info: dict):
+        """Register the model to the MLflow Model Registry."""
+        try:
+            
+            model_uri = model_info['model_uri']
+            model_name = model_info['model_name']
+
+            model_version = mlflow.register_model(model_uri=model_uri, name=model_name)
+            client = mlflow.tracking.MlflowClient()
+
+            client.transition_model_version_stage(
+               name=model_name,
+               version=model_version.version,
+               stage="Staging"
+            )
+            
+            logging.info(f"Model {model_name} version {model_version.version} registered and transitioned to Staging.")
+        
+        except Exception as e:
+            logging.error('Error during model registration: %s', e)
+            raise CustomException(e, sys)
+
+    
+

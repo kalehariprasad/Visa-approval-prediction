@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import os
 from src.constants import *
 
@@ -37,3 +37,17 @@ class DataPreprocessconfig:
         self.train_y_path = os.path.join(self.features_folder,TRAIN_Y)
         self.test_x_path = os.path.join(self.features_folder,TEST_X)
         self.test_y_path = os.path.join(self.features_folder,TEST_Y)
+
+
+
+@dataclass
+class ModelConfig:
+    base_path: str = field(default_factory=lambda: os.path.join(os.getcwd(), REPORTS_DITECTORY))
+    model_name: str = "KNN_MODEL"
+    model_artifact_path: str = "model"
+    
+
+    def __post_init__(self):
+        self.repost_json = os.path.join(self.base_path, MODEL_METRICS_JSON)
+        self.repost_txt = os.path.join(self.base_path, MODEL_METRICS_TXT)
+        self.model_experiment_info = os.path.join(self.base_path, MODEL_RUN_INFO)

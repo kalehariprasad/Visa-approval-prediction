@@ -3,6 +3,9 @@ from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
+# current time
+CURRENT_TIME = datetime.now().time()
+
 # data injection related constatnts
 
 connection_string = os.getenv('connection_string')
@@ -37,3 +40,11 @@ TRAIN_X = 'train_x.npy'
 TRAIN_Y = 'train_y.npy'
 TEST_X ='test_x.npy'
 TEST_Y = 'test_y.npy'
+
+
+# Model Evauluation
+
+REPORTS_DITECTORY = "reports"
+MODEL_METRICS_JSON= "model_metrics.json"
+MODEL_METRICS_TXT= "model_metrics.txt"
+MODEL_RUN_INFO = "model_run_info.json"

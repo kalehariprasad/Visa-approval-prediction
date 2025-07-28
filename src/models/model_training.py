@@ -10,7 +10,7 @@ from src.configuration.config import DataPreprocessconfig
 from sklearn.neighbors import KNeighborsClassifier
 
 
-mlflow.set_tracking_uri("http://ec2-54-173-113-213.compute-1.amazonaws.com:5000//")
+mlflow.set_tracking_uri("http://ec2-52-201-232-201.compute-1.amazonaws.com:5000//")
 
 
 class Modeling:
@@ -37,10 +37,10 @@ class Modeling:
         
     def evaluate_model(self):
         try:
-            Model=self.train_model()
+            model, run_id = self.train_model()
             test_x =self.data_handler.load_numpy_array(self.config.test_x_path)
             test_y = self.data_handler.load_numpy_array(self.config.test_y_path)
-            report = self.model.evaluate_model(model=Model,test_x=test_x,test_y=test_y,)
+            report = self.model.evaluate_model(model=model,test_x=test_x,test_y=test_y,training_run_id=run_id)
             return report
         except Exception as e:
             raise CustomException(e,sys)

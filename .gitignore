@@ -97,7 +97,7 @@ notebooks\.env
 #logs folder
 logs/
 
-
-
-
+#data folder
 /data
+# mlruns Folder 
+/mlruns

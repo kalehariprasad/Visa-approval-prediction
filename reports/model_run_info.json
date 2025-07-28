@@ -1,0 +1,6 @@
+{
+    "run_id": "8ac9be1d5a704ab18477ecb4136b7ebf",
+    "model_path": "model",
+    "model_uri": "runs:/8ac9be1d5a704ab18477ecb4136b7ebf/model",
+    "model_name": "KNN_MODEL"
+}
