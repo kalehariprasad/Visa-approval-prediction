@@ -252,7 +252,7 @@ class Model:
         
 class MLFlowInstance:
     def __init__(self):
-        pass
+        self.model_config = ModelConfig()
     def save_model_info(
         self, run_id: str, model_path: str, file_path: str, model_name: str
     ) -> None:
@@ -293,6 +293,7 @@ class MLFlowInstance:
             
             model_uri = model_info['model_uri']
             model_name = model_info['model_name']
+            
 
             model_version = mlflow.register_model(model_uri=model_uri, name=model_name)
             client = mlflow.tracking.MlflowClient()
@@ -308,6 +309,28 @@ class MLFlowInstance:
         except Exception as e:
             logging.error('Error during model registration: %s', e)
             raise CustomException(e, sys)
+    def model_stage_transfer(self, model_info: dict):
+        """Transfer the latest model in 'Staging' to 'Production' in MLflow Model Registry."""
+        try:
+            model_name = model_info['model_name']
+            client = mlflow.tracking.MlflowClient()
+            staging_versions = client.get_latest_versions(model_name, stages=["Staging"])
+            if not staging_versions:
+                logging.warning(f"No model in 'Staging' stage for model {model_name}")
+                return
+            latest_staging_version = staging_versions[0].version
+            client.transition_model_version_stage(
+                name=model_name,
+                version=latest_staging_version,
+                stage="Production",
+                #archive_existing_versions=True  
+            )
+            logging.info(f"Model {model_name} version {latest_staging_version} transitioned to 'Production'.")
 
+        except Exception as e:
+            logging.error('Error during model stage transfer to Production: %s', e)
+            raise CustomException(e, sys)
+
+    
     
 
