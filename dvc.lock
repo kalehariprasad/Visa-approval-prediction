@@ -144,12 +144,12 @@ stages:
       size: 584
     - path: src/models/model_training.py
       hash: md5
-      md5: df9943a9a3c9741fac327dd73ac1516c
+      md5: 81cd922df8207c4e2366721fc2c5165b
       size: 1851
     outs:
     - path: reports/
       hash: md5
-      md5: fb27153ef9063bad949dad8fe8fce861.dir
+      md5: d5bc1221238cbb887344493b071d36f4.dir
       size: 1250
       nfiles: 3
   register_model:
@@ -161,7 +161,7 @@ stages:
       size: 1067
     - path: reports/
       hash: md5
-      md5: fb27153ef9063bad949dad8fe8fce861.dir
+      md5: d5bc1221238cbb887344493b071d36f4.dir
       size: 1250
       nfiles: 3
     - path: src/configuration/config.py
@@ -194,11 +194,11 @@ stages:
       size: 584
     - path: src/models/model_training.py
       hash: md5
-      md5: df9943a9a3c9741fac327dd73ac1516c
+      md5: 81cd922df8207c4e2366721fc2c5165b
       size: 1851
     - path: src/models/register_model.py
       hash: md5
-      md5: c14e843a022c2ee4a51a7fa7e8356d12
+      md5: 4488c8655ef4a96aadad7823d0753eb0
       size: 881
   model_stage_transfer:
     cmd: python src/models/model_transaction.py
@@ -209,7 +209,7 @@ stages:
       size: 1067
     - path: reports/
       hash: md5
-      md5: fb27153ef9063bad949dad8fe8fce861.dir
+      md5: d5bc1221238cbb887344493b071d36f4.dir
       size: 1250
       nfiles: 3
     - path: src/configuration/config.py
@@ -242,13 +242,69 @@ stages:
       size: 584
     - path: src/models/model_training.py
       hash: md5
-      md5: df9943a9a3c9741fac327dd73ac1516c
+      md5: 81cd922df8207c4e2366721fc2c5165b
       size: 1851
     - path: src/models/model_transaction.py
       hash: md5
-      md5: 4bdae31690a65164beb7eb24b3d94a7e
+      md5: ad07c5637fac5de8fec56b5a744d8fa1
       size: 887
     - path: src/models/register_model.py
       hash: md5
-      md5: c14e843a022c2ee4a51a7fa7e8356d12
+      md5: 4488c8655ef4a96aadad7823d0753eb0
+      size: 881
+  model_inference:
+    cmd: python src\models\model_inference.py
+    deps:
+    - path: config/schema.yaml
+      hash: md5
+      md5: a5660e68708687ce1f9516b6b26fec98
+      size: 1067
+    - path: reports/
+      hash: md5
+      md5: d5bc1221238cbb887344493b071d36f4.dir
+      size: 1250
+      nfiles: 3
+    - path: src/configuration/config.py
+      hash: md5
+      md5: 97812e49343a8b519a2e1f63828aa20d
+      size: 2357
+    - path: src/constants/__init__.py
+      hash: md5
+      md5: 475dde1bd305f6fe804cd39e62141909
+      size: 1133
+    - path: src/data/data_injection.py
+      hash: md5
+      md5: 55045365a5d8d486fde12dc19b62b02d
+      size: 1532
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: 3769f46f2567c7544b139fdbd2133d74
+      size: 5747
+    - path: src/data/data_validation.py
+      hash: md5
+      md5: 8e9e338420236544c0e59e89c69116c9
+      size: 5983
+    - path: src/exception/__init__.py
+      hash: md5
+      md5: 702ffdb8b43775375d093b1eedce434b
+      size: 928
+    - path: src/logger/__init__.py
+      hash: md5
+      md5: 7441f85fc83a7148bdf9ed90e60f3a60
+      size: 584
+    - path: src/models/model_inference.py
+      hash: md5
+      md5: c42f6bdbd4d075d3cc9876f0d9b0de16
+      size: 1830
+    - path: src/models/model_training.py
+      hash: md5
+      md5: 81cd922df8207c4e2366721fc2c5165b
+      size: 1851
+    - path: src/models/model_transaction.py
+      hash: md5
+      md5: ad07c5637fac5de8fec56b5a744d8fa1
+      size: 887
+    - path: src/models/register_model.py
+      hash: md5
+      md5: 4488c8655ef4a96aadad7823d0753eb0
       size: 881

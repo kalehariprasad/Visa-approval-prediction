@@ -1,6 +1,7 @@
 import os
 import sys
 import mlflow.sklearn
+import mlflow.pyfunc
 import yaml
 import joblib
 import json
@@ -88,6 +89,13 @@ class DataHandler:
                 joblib.dump(object, f)
         except Exception as e:
             raise CustomException (e,sys)
+        
+    def load_object(self, file_path: str):
+        try:
+            with open(file_path, "rb") as f:
+                return joblib.load(f)
+        except Exception as e:
+            raise CustomException(e, sys)
     def save_numpy_array(self,file_path: str, array: np.ndarray):
         """
         Saves a NumPy array to the specified file path (.npy format).
@@ -197,7 +205,7 @@ class Model:
                 # Log the trained model
                 mlflow.sklearn.log_model(
                     sk_model=model,
-                    artifact_path="model",
+                    name="model",
                     signature=signature,
                     input_example=train_x.iloc[:5] if hasattr(train_x, 'iloc') else train_x[:5]
                 )
@@ -331,6 +339,15 @@ class MLFlowInstance:
             logging.error('Error during model stage transfer to Production: %s', e)
             raise CustomException(e, sys)
 
-    
+
+    def load_model_for_inference(self,model_info):
+        try:
+
+            model_uri = model_info['model_uri']
+            model = mlflow.pyfunc.load_model(model_uri)
+            return model
+        except Exception as e:
+            raise CustomException (e,sys)
+        
     
 
