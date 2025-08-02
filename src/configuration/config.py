@@ -43,6 +43,7 @@ class DataPreprocessconfig:
 @dataclass
 class ModelConfig:
     base_path: str = field(default_factory=lambda: os.path.join(os.getcwd(), REPORTS_DITECTORY))
+    model_base_path: str = field(default_factory=lambda: os.path.join(os.getcwd(), MODEL_DIECTORY))
     model_name: str = "KNN_MODEL"
     model_artifact_path: str = "model"
     
@@ -51,3 +52,4 @@ class ModelConfig:
         self.repost_json = os.path.join(self.base_path, MODEL_METRICS_JSON)
         self.repost_txt = os.path.join(self.base_path, MODEL_METRICS_TXT)
         self.model_experiment_info = os.path.join(self.base_path, MODEL_RUN_INFO)
+        self.model_path_loacl = os.path.join(self.model_base_path,MODEL)

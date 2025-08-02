@@ -43,7 +43,8 @@ TEST_Y = 'test_y.npy'
 
 
 # Model Evauluation
-
+MODEL_DIECTORY = "models"
+MODEL  = "model.pkl"
 REPORTS_DITECTORY = "reports"
 MODEL_METRICS_JSON= "model_metrics.json"
 MODEL_METRICS_TXT= "model_metrics.txt"

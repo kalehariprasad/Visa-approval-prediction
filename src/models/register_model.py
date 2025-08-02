@@ -16,7 +16,7 @@ class Mlflow:
   
     def Model_register(self):
         try:
-            mlflow.set_tracking_uri("http://ec2-44-201-170-42.compute-1.amazonaws.com:5000//")
+            mlflow.set_tracking_uri("http://ec2-18-233-225-116.compute-1.amazonaws.com:5000//")
             model_info = self.mlflow.load_model_info(self.config.model_experiment_info)
             self.mlflow.register_model(model_info=model_info)
         except Exception as e:
