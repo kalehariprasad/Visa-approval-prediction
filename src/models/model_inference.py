@@ -21,7 +21,7 @@ class Mlflow:
 
     def Model_inference(self):
         try:
-            mlflow.set_tracking_uri("http://ec2-18-233-225-116.compute-1.amazonaws.com:5000//")
+            mlflow.set_tracking_uri("http://ec2-54-145-130-138.compute-1.amazonaws.com:5000//")
             model_info = self.mlflow.load_model_info(self.config.model_experiment_info)
             model = self.mlflow.load_model_for_inference(model_info)
             df = pd.read_csv(self.data_injection_config.test_file_path)

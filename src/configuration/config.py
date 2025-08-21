@@ -26,12 +26,13 @@ class DataValidationconfig:
 @dataclass
 class DataPreprocessconfig:
     base_path = os.path.join(os.getcwd(),ARTIFACTS_DIRECTORY)
+    model_base_path = os.path.join(os.getcwd(),MODEL_DIECTORY)
 
     def __post_init__(self):
         self.preprocessed_folder = os.path.join(self.base_path,DATA_PREPROCESSING_FOLDER)
         self.preprocessed_train = os.path.join(self.preprocessed_folder,PREPROCESSED_TRAIN)
         self.preprocessed_test = os.path.join(self.preprocessed_folder,PREPROCESSED_TEST)
-        self.preprocessor = os.path.join(self.preprocessed_folder,PREPROCESSOR_OBJECT)
+        self.preprocessor = os.path.join(self.model_base_path,PREPROCESSOR_OBJECT)
         self.features_folder = os.path.join(self.base_path,FEATURE_FOLDER)
         self.train_x_path = os.path.join(self.features_folder,TRAIN_X)
         self.train_y_path = os.path.join(self.features_folder,TRAIN_Y)

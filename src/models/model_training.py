@@ -10,7 +10,7 @@ from src.configuration.config import DataPreprocessconfig,ModelConfig
 from sklearn.neighbors import KNeighborsClassifier
 
 
-mlflow.set_tracking_uri("http://ec2-18-233-225-116.compute-1.amazonaws.com:5000//")
+mlflow.set_tracking_uri("http://ec2-54-145-130-138.compute-1.amazonaws.com:5000///")
 
 
 class Modeling:
