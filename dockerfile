@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy only necessary files/folders
 COPY app/ ./app/
 COPY models/model.pkl ./models/model.pkl
-COPY data/preprocessed/preprocessor.pkl ./data/preprocessed/preprocessor.pkl
+COPY models/preprocessor.pkl ./models/preprocessor.pkl
 
 # Expose Streamlit port
 EXPOSE 8501
