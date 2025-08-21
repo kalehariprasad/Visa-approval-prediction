@@ -26,3 +26,4 @@ dagshub
 flake8
 evidently==0.2.8
 streamlit
+pipreqs
