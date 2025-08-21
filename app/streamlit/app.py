@@ -14,9 +14,8 @@ utilities = streamlitutilies()
 curr_dir = Path(__file__).resolve()
 home_dir = curr_dir.parents[2]
 models_folder = home_dir / 'models'
-data_folder = home_dir / 'data'
 model_path = models_folder / 'model.pkl'
-prprocessor_path = data_folder / 'preprocessed' / 'preprocessor.pkl'
+prprocessor_path = models_folder /'preprocessor.pkl'
 
 
 model = utilities.load_object(model_path)
