@@ -8,9 +8,10 @@ from src.exception import CustomException
 from src.utils import DataHandler, Model
 from src.configuration.config import DataPreprocessconfig,ModelConfig
 from sklearn.neighbors import KNeighborsClassifier
+from catboost import CatBoostClassifier
 
 
-mlflow.set_tracking_uri("http://ec2-54-145-130-138.compute-1.amazonaws.com:5000///")
+mlflow.set_tracking_uri("http://ec2-44-201-197-168.compute-1.amazonaws.com:5000")
 
 
 class Modeling:
@@ -22,13 +23,15 @@ class Modeling:
 
     def train_model(self):
         try:
-            model_class = KNeighborsClassifier
+            model_class = CatBoostClassifier
             train_x = self.data_handler.load_numpy_array(self.config.train_x_path)
             train_y = self.data_handler.load_numpy_array(self.config.train_y_path)
             params = {
-                "algorithm": "auto",
-                "weights": "distance",
-                "n_neighbors": 4
+           'learning_rate': 0.1,
+            'l2_leaf_reg': 3,
+            'iterations': 200,
+            'depth': 6,
+            'border_count': 64
             }
 
             trained_model = self.model.train_model(model_class=model_class, train_x=train_x, train_y=train_y, params=params)
