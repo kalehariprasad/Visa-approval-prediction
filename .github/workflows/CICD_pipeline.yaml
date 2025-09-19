@@ -25,7 +25,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
          pip install -r requirements.txt
-         
+
+    - name: Linting the code 
+      run: |
+        flake8 src/
+
 
 
 

@@ -17,35 +17,35 @@ CONNECTION_URL = connection_string
 ARTIFACTS_DIRECTORY = "data"
 RAW_DATA_DIRECTORY = "raw"
 RAW_DATA_FILE = "Easyvisa.csv"
-RAW_TRAIN_FILE= "train.csv"
-RAW_TEST_FILE= "test.csv"
+RAW_TRAIN_FILE = "train.csv"
+RAW_TEST_FILE = "test.csv"
 
 # data validation related constant
 
-DATA_VALIDATION_FOLDER="data_validation"
+DATA_VALIDATION_FOLDER = "data_validation"
 SCHEMA_FILE_PATH = os.path.join("config", "schema.yaml")
 
 
 # date transfromation realetd constants
 
-DATA_PREPROCESSING_FOLDER = "preprocessed" 
+DATA_PREPROCESSING_FOLDER = "preprocessed"
 PREPROCESSED_TRAIN = "train.csv"
 PREPROCESSED_TEST = "test.csv"
 PREPROCESSOR_OBJECT = "preprocessor.pkl"
 
 
-#features 
+# features
 FEATURE_FOLDER = 'festures'
 TRAIN_X = 'train_x.npy'
 TRAIN_Y = 'train_y.npy'
-TEST_X ='test_x.npy'
+TEST_X = 'test_x.npy'
 TEST_Y = 'test_y.npy'
 
 
 # Model Evauluation
 MODEL_DIECTORY = "models"
-MODEL  = "model.pkl"
+MODEL = "model.pkl"
 REPORTS_DITECTORY = "reports"
-MODEL_METRICS_JSON= "model_metrics.json"
-MODEL_METRICS_TXT= "model_metrics.txt"
+MODEL_METRICS_JSON = "model_metrics.json"
+MODEL_METRICS_TXT = "model_metrics.txt"
 MODEL_RUN_INFO = "model_run_info.json"

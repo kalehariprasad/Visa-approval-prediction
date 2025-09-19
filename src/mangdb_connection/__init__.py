@@ -1,17 +1,18 @@
-
-from src.constants import DB_NAME, CONNECTION_URL,COLLECTION_NAME
+from src.constants import DB_NAME, CONNECTION_URL, COLLECTION_NAME
 from src.logger import logging
 from src.exception import CustomException
 import pymongo
 import certifi
 import sys
 
+
 ca = certifi.where()
+
 
 class MongoDBClient:
     """
     Class: MongoDBClient
-    Description: Handles connection to MongoDB and provides access to the specified database.
+    Description: MongoDB and provides access to the specified database.
     """
     client = None
 
@@ -19,14 +20,21 @@ class MongoDBClient:
         try:
             if MongoDBClient.client is None:
                 if CONNECTION_URL is None:
-                    
-                    raise Exception("MongoDB connection string (CONNECTION_URL) is not set in environment.")
-                MongoDBClient.client = pymongo.MongoClient(CONNECTION_URL, tlsCAFile=ca)
+                    raise Exception(
+                        "MongoDB connection string (CONNECTION_URL) /"
+                        " is not set in environment."
+                    )
+                MongoDBClient.client = pymongo.MongoClient(
+                    CONNECTION_URL, tlsCAFile=ca
+                )
 
             self.client = MongoDBClient.client
             self.database = self.client[database_name]
             self.collection = self.database[COLLECTION_NAME]
-            logging.info(f"MongoDB connection successful to database: {database_name}")
+
+            logging.info(
+                f"MongoDB connection successful to database: {database_name}"
+            )
         except Exception as e:
             raise CustomException(e, sys)
 

@@ -1,5 +1,6 @@
 import sys
 
+
 class CustomException(Exception):
     def __init__(self, error_message: Exception, error_detail: sys) -> None:
         self.error_message = CustomException.get_error_details(
@@ -14,7 +15,8 @@ class CustomException(Exception):
         file_name = exce_tb.tb_frame.f_code.co_filename
 
         error_message = f"""
-        Error occurred while executing [{file_name}] at line [{exception_line_number}].
+        Error occurred while executing [{file_name}]\n"
+        "at line [{exception_line_number}].
         Error message is [{error_message}]
         """
         return error_message.strip()
