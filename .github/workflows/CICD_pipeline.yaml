@@ -1,3 +1,13 @@
+name: DVC Pipeline Automation
+
+on:
+  push:
+    branches:
+      - ops
+  pull_request:
+    branches:
+      - main  # ✅ You probably meant to track PRs to 'main'
+
 jobs:
   lint-and-check:
     runs-on: ubuntu-latest
