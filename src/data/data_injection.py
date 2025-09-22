@@ -31,6 +31,7 @@ class DataInjection:
             data.save_data(test_df, artifacts.test_file_path)
 
             data.save_data(df,)
+            print(data.head())
             logging.info('testing working')
 
         except Exception as e:
