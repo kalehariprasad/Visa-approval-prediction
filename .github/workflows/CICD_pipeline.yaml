@@ -3,13 +3,13 @@ name: DVC Pipeline Automation
 on:
   push:
     branches:
-      - main
+      - ops
   pull_request:
     branches:
       - main
 
 jobs:
-  code-cheking:
+  code-linting:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +29,11 @@ jobs:
     - name: Linting the code 
       run: |
         flake8 src/
+  code checking:
+    - name: Run data injection script
+      env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+      run: python src/data/data_injection.py
 
 
 
