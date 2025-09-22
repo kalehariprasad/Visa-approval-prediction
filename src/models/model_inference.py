@@ -2,7 +2,7 @@ import pandas as pd
 import sys
 import mlflow
 from src.logger import logging
-from src.configuration.config import SCHEMA_FILE_PATH
+from src.constants import SCHEMA_FILE_PATH
 from src.exception import CustomException
 from src.utils import MLFlowInstance, Preprocessing, DataHandler
 from src.configuration.config import (
@@ -23,7 +23,7 @@ class Mlflow:
     def Model_inference(self):
         try:
             mlflow.set_tracking_uri(
-                "http://ec2-44-201-197-168.compute-1.amazonaws.com:5000"
+                "http://ec2-44-204-17-132.compute-1.amazonaws.com:5000"
                 )
             model_info = self.mlflow.load_model_info(
                 self.config.model_experiment_info

@@ -206,7 +206,7 @@ class Model:
                                 )
                 mlflow.sklearn.log_model(
                     sk_model=model,
-                    name="model",
+                    artifact_path="model",
                     signature=signature,
                     input_example=input_example
                 )
@@ -219,7 +219,7 @@ class Model:
     def evaluate_model(self, model, test_x, test_y, training_run_id):
         try:
 
-            with mlflow.start_run(run_name='model_evaluation') as run:
+            with mlflow.start_run(run_name='model_evaluation'):
                 predicted = model.predict(test_x)
                 acc = accuracy_score(test_y, predicted)
                 f1 = f1_score(test_y, predicted)
@@ -258,7 +258,7 @@ class Model:
                 model_name = self.model_config.model_name
                 model_path = self.model_config.model_artifact_path
                 model_info_path = self.model_config.model_experiment_info
-                self.mlflow.save_model_info(run_id=run.run_id,
+                self.mlflow.save_model_info(run_id=training_run_id,
                                             model_name=model_name,
                                             model_path=model_path,
                                             file_path=model_info_path)

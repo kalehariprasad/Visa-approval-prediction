@@ -8,7 +8,7 @@ from src.configuration.config import DataPreprocessconfig, ModelConfig
 from catboost import CatBoostClassifier
 
 mlflow.set_tracking_uri(
-    "http://ec2-44-201-197-168.compute-1.amazonaws.com:5000"
+    "http://ec2-44-204-17-132.compute-1.amazonaws.com:5000"
     )
 
 
