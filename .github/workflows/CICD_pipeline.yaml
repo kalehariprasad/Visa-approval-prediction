@@ -19,10 +19,16 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Lint the code
@@ -30,10 +36,12 @@ jobs:
 
       - name: Run data injection script
         env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
         run: python src/data/data_injection.py
 
       - name: Run data validation script
+        env:
+          MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
         run: python src/data/data_validation.py
 
       - name: Run data preprocessing script
