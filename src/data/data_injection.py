@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import traceback
 from src.logger import logging
-from src.exception import CustomException
+# from src.exception import CustomException
 from src.mangdb_connection import MongoDBClient
 from src.configuration.config import DataInjectionConfig
 from sklearn.model_selection import train_test_split
