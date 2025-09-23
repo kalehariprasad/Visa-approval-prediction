@@ -8,7 +8,7 @@ CURRENT_TIME = datetime.now().time()
 
 # data injection related constatnts
 
-connection_string = os.getenv('connection_string')
+connection_string = os.getenv('MONGO_CONNECTION_URL')
 DB_NAME = "VISA"
 COLLECTION_NAME = "visa_data"
 CONNECTION_URL = connection_string
