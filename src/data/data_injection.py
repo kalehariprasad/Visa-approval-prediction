@@ -20,7 +20,10 @@ class DataInjection:
         try:
             # Debug: Print MONGO_URI to ensure it's loaded
             mongo_uri = os.getenv("MONGO_URI")
-            print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********")
+            if mongo_uri is None:
+                print("[DEBUG] MONGO_URI is not set")
+            else:
+                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********")
             print("[DEBUG] Connecting to MongoDB...")
 
             db = self.mangodb
