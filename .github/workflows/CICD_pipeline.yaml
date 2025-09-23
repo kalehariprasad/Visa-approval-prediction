@@ -6,19 +6,24 @@ on:
       - ops
   pull_request:
     branches:
-      - main  
+      - main
 
 jobs:
   lint-and-check:
     runs-on: ubuntu-latest
+
     steps:
+      # ✅ Step 1: Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # ✅ Step 2: Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
+      # ✅ Step 3: Cache pip dependencies to speed up CI
       - name: Cache pip dependencies
         uses: actions/cache@v3
         with:
@@ -27,22 +32,49 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      # ✅ Step 4: Install Python dependencies
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
 
+      # ✅ Step 5: Lint your codebase
       - name: Lint the code
         run: flake8 src/
 
+      # ✅ Step 6: Run data injection script (pulls from MongoDB)
       - name: Run data injection script
         env:
           MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
-        run: python src/data/data_injection.py
-        
+        run: |
+          echo "▶ Running data injection..."
+          python src/data/data_injection.py
+
+      # ✅ Step 7: Debug — Check if data files were created
       - name: 🐞 Debug: Check if data files were created
         run: |
-          echo "📁 Checking data directory:"
-          ls -R data
+          echo "📁 Checking contents of data directory:"
+          ls -R data || echo "❌ 'data' directory not found"
 
           echo "📄 Checking train.csv:"
           cat data/raw/train.csv || echo "❌ train.csv not found"
+
+          echo "📄 Checking test.csv:"
+          cat data/raw/test.csv || echo "❌ test.csv not found"
+
+          echo "📄 Checking Easyvisa.csv:"
+          cat data/raw/Easyvisa.csv || echo "❌ Easyvisa.csv not found"
+
+      # ✅ Step 8: Run data validation script
+      - name: Run data validation script
+        env:
+          MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
+        run: |
+          echo "▶ Running data validation..."
+          python src/data/data_validation.py
+
+      # ✅ Step 9: Run preprocessing script
+      - name: Run data preprocessing script
+        run: |
+          echo "▶ Running data preprocessing..."
+          python src/data/data_preprocessing.py
