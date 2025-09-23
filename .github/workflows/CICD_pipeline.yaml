@@ -38,11 +38,11 @@ jobs:
         env:
           MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
         run: python src/data/data_injection.py
+        
+      - name: 🐞 Debug: Check if data files were created
+        run: |
+          echo "📁 Checking data directory:"
+          ls -R data
 
-      - name: Run data validation script
-        env:
-          MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
-        run: python src/data/data_validation.py
-
-      - name: Run data preprocessing script
-        run: python src/data/data_preprocessing.py
+          echo "📄 Checking train.csv:"
+          cat data/raw/train.csv || echo "❌ train.csv not found"
