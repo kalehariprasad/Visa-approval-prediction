@@ -6,7 +6,7 @@ on:
       - ops
   pull_request:
     branches:
-      - main  # ✅ You probably meant to track PRs to 'main'
+      - main  
 
 jobs:
   lint-and-check:
@@ -32,3 +32,9 @@ jobs:
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
         run: python src/data/data_injection.py
+
+      - name: Run data validation script
+        run: python src/data/data_validation.py
+
+      - name: Run data preprocessing script
+        run: python src/data/data_preprocessing.py
