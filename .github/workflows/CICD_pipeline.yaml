@@ -51,7 +51,7 @@ jobs:
           python src/data/data_injection.py
 
       # ✅ Step 7: Debug — Check if data files were created
-      - name: 🐞 Debug: Check if data files were created
+      - name: Debug: Check if data files were created
         run: |
           echo "📁 Checking contents of data directory:"
           ls -R data || echo "❌ 'data' directory not found"
