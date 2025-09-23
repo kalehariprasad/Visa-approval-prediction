@@ -43,12 +43,16 @@ jobs:
         run: flake8 src/
 
       # ✅ Step 6: Run data injection script (pulls from MongoDB)
-      - name: Run data injection script
+      - name: Run data injection script with debug
         env:
           MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
         run: |
           echo "▶ Running data injection..."
-          python src/data/data_injection.py
+          python src/data/data_injection.py || {
+            echo "❌ Data injection failed. Printing logs..."
+            exit 1
+          }
+
 
       # ✅ Step 7: Debug — Check if data files were created
       - name: Debug Check if data files were created
