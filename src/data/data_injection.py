@@ -1,6 +1,7 @@
 import sys
 import os
 import pandas as pd
+import traceback
 from src.logger import logging
 from src.exception import CustomException
 from src.mangdb_connection import MongoDBClient
@@ -62,8 +63,9 @@ class DataInjection:
             logging.info("✅ Data injection completed successfully.")
 
         except Exception as e:
+            traceback.print_exc()  # <-- this prints full error trace
             logging.error(f"❌ Error occurred during data injection: {e}")
-            raise CustomException(e, sys)
+            sys.exit(1)
 
 
 if __name__ == "__main__":
