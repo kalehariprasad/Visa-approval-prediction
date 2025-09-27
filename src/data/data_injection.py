@@ -24,8 +24,10 @@ class DataInjection:
             if mongo_uri is None:
                 print("[DEBUG] MONGO_URI is not set")
             else:
-                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********", flush=True)
-            print("[DEBUG] Connecting to MongoDB...",flush=True)
+                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********",
+                      flush=True
+                      )
+            print("[DEBUG] Connecting to MongoDB...", flush=True)
 
             db = self.mangodb
             data = self.data_handler
@@ -64,7 +66,9 @@ class DataInjection:
                 sys.exit(1)
 
             print("✅ Data injection completed successfully.", flush=True)
-            logging.info("✅ Data injection completed successfully.", flush=True)
+            logging.info("✅ Data injection completed successfully.",
+                         flush=True
+                         )
 
         except Exception as e:
             traceback.print_exc()  # <-- this prints full error trace
