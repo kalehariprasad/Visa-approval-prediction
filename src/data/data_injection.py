@@ -34,7 +34,7 @@ class DataInjection:
             # Fetch data from MongoDB
             df = pd.DataFrame(list(db.collection.find()))
 
-            logging.INFO(f"[DEBUG] Number of records fetched: {len(df)}")
+            logging.info(f"[DEBUG] Number of records fetched: {len(df)}")
 
             if df.empty:
                 print("❌ No data fetched from MongoDB. Exiting.")
