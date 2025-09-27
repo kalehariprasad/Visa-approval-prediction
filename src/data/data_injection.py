@@ -24,9 +24,7 @@ class DataInjection:
             if mongo_uri is None:
                 print("[DEBUG] MONGO_CONNECTION_URL is not set")
             else:
-                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********",
-                      flush=True
-                      )
+                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********")
             print("[DEBUG] Connecting to MongoDB...", flush=True)
 
             db = self.mangodb
@@ -36,10 +34,10 @@ class DataInjection:
             # Fetch data from MongoDB
             df = pd.DataFrame(list(db.collection.find()))
 
-            print(f"[DEBUG] Number of records fetched: {len(df)}", flush=True)
+            print(f"[DEBUG] Number of records fetched: {len(df)}")
 
             if df.empty:
-                print("❌ No data fetched from MongoDB. Exiting.", flush=True)
+                print("❌ No data fetched from MongoDB. Exiting.")
                 sys.exit(1)
 
             # Drop MongoDB ID column if it exists
@@ -58,14 +56,14 @@ class DataInjection:
 
             # Final check for files
             if not os.path.exists(artifacts.train_file_path):
-                print("❌ train.csv was not created.", flush=True)
+                print("❌ train.csv was not created.")
                 sys.exit(1)
 
             if not os.path.exists(artifacts.test_file_path):
-                print("❌ test.csv was not created.", flush=True)
+                print("❌ test.csv was not created.")
                 sys.exit(1)
 
-            print("✅ Data injection completed successfully.", flush=True)
+            print("✅ Data injection completed successfully.")
             logging.info("✅ Data injection completed successfully.",
                          flush=True
                          )
