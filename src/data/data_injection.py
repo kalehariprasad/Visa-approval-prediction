@@ -64,9 +64,7 @@ class DataInjection:
                 sys.exit(1)
 
             print("✅ Data injection completed successfully.")
-            logging.info("✅ Data injection completed successfully.",
-                         flush=True
-                         )
+            logging.info("✅ Data injection completed successfully.")
 
         except Exception as e:
             raise CustomException(e, sys)
