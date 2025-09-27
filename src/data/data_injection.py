@@ -70,9 +70,9 @@ class DataInjection:
                          flush=True
                          )
 
-        except Exception as e:
-            traceback.print_exc()  # <-- this prints full error trace
-            logging.error(f"❌ Error occurred during data injection: {e}")
+        except Exception:
+            traceback.print_exc()
+            logging.error("Exception occurred", exc_info=True)
             sys.exit(1)
 
 

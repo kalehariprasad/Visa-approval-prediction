@@ -1,4 +1,5 @@
 import logging
+import sys
 import os
 from datetime import datetime
 import pathlib
@@ -15,9 +16,9 @@ log_file_name = f"log_{current_time_stamp}.log"
 
 log_file_path = os.path.join(logs_folder, log_file_name)
 
+
 logging.basicConfig(
-    filename=log_file_path,
-    filemode="w",
-    format='[%(asctime)s] %(name)s - %(levelname)s %(message)s',
-    level=logging.INFO
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stderr
 )
