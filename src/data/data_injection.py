@@ -17,14 +17,15 @@ class DataInjection:
         self.artifact = DataInjectionConfig()
 
     def initiate_data_injection(self):
+        print("[DEBUG] Script started", flush=True)
         try:
             # Debug: Print MONGO_URI to ensure it's loaded
             mongo_uri = os.getenv("MONGO_URI")
             if mongo_uri is None:
                 print("[DEBUG] MONGO_URI is not set")
             else:
-                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********")
-            print("[DEBUG] Connecting to MongoDB...")
+                print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********", flush=True)
+            print("[DEBUG] Connecting to MongoDB...",flush=True)
 
             db = self.mangodb
             data = self.data_handler
@@ -33,10 +34,10 @@ class DataInjection:
             # Fetch data from MongoDB
             df = pd.DataFrame(list(db.collection.find()))
 
-            print(f"[DEBUG] Number of records fetched: {len(df)}")
+            print(f"[DEBUG] Number of records fetched: {len(df)}", flush=True)
 
             if df.empty:
-                print("❌ No data fetched from MongoDB. Exiting.")
+                print("❌ No data fetched from MongoDB. Exiting.", flush=True)
                 sys.exit(1)
 
             # Drop MongoDB ID column if it exists
@@ -55,15 +56,15 @@ class DataInjection:
 
             # Final check for files
             if not os.path.exists(artifacts.train_file_path):
-                print("❌ train.csv was not created.")
+                print("❌ train.csv was not created.", flush=True)
                 sys.exit(1)
 
             if not os.path.exists(artifacts.test_file_path):
-                print("❌ test.csv was not created.")
+                print("❌ test.csv was not created.", flush=True)
                 sys.exit(1)
 
-            print("✅ Data injection completed successfully.")
-            logging.info("✅ Data injection completed successfully.")
+            print("✅ Data injection completed successfully.", flush=True)
+            logging.info("✅ Data injection completed successfully.", flush=True)
 
         except Exception as e:
             traceback.print_exc()  # <-- this prints full error trace
