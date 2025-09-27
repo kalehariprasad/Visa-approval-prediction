@@ -54,7 +54,7 @@ jobs:
           }
 
       # Step 7: Debug: Check data file outputs
-      - name: Debug: Check data file outputs
+      - name: Debug Check data file outputs
         run: |
           echo "📁 Listing data/raw directory contents:"
           ls -lR data/raw || echo "❌ 'data/raw' directory not found"
