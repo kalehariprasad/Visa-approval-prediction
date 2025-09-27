@@ -3,7 +3,6 @@ import os
 import pandas as pd
 from src.logger import logging
 from src.exception import CustomException
-# from src.exception import CustomException
 from src.mangdb_connection import MongoDBClient
 from src.configuration.config import DataInjectionConfig
 from sklearn.model_selection import train_test_split
@@ -25,16 +24,17 @@ class DataInjection:
                 print("[DEBUG] MONGO_CONNECTION_URL is not set")
             else:
                 print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********")
-            print("[DEBUG] Connecting to MongoDB...")
+            logging.info("Connecting to MongoDB...")
 
             db = self.mangodb
             data = self.data_handler
             artifacts = self.artifact
+            logging.info("connected to MangoDb.....")
 
             # Fetch data from MongoDB
             df = pd.DataFrame(list(db.collection.find()))
 
-            print(f"[DEBUG] Number of records fetched: {len(df)}")
+            logging.INFO(f"[DEBUG] Number of records fetched: {len(df)}")
 
             if df.empty:
                 print("❌ No data fetched from MongoDB. Exiting.")
@@ -43,16 +43,17 @@ class DataInjection:
             # Drop MongoDB ID column if it exists
             if '_id' in df.columns:
                 df.drop(columns='_id', inplace=True)
-
             # Split data
             train_df, test_df = train_test_split(
                 df, test_size=0.2, random_state=42
             )
-
             # Save data
             data.save_data(df, artifacts.raw_file_path)
+            logging.info(f"Raw Data Saved at{artifacts.raw_file_path}")
             data.save_data(train_df, artifacts.train_file_path)
+            logging.info(f"Raw Train Data Saved at{artifacts.train_file_path}")
             data.save_data(test_df, artifacts.test_file_path)
+            logging.info(f"Raw Test Data Saved at{artifacts.test_file_path}")
 
             # Final check for files
             if not os.path.exists(artifacts.train_file_path):
