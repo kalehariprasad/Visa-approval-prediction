@@ -1,8 +1,8 @@
 import sys
 import os
 import pandas as pd
-import traceback
 from src.logger import logging
+from src.exception import CustomException
 # from src.exception import CustomException
 from src.mangdb_connection import MongoDBClient
 from src.configuration.config import DataInjectionConfig
@@ -70,10 +70,8 @@ class DataInjection:
                          flush=True
                          )
 
-        except Exception:
-            traceback.print_exc()
-            logging.error("Exception occurred", exc_info=True)
-            sys.exit(1)
+        except Exception as e:
+            raise CustomException(e, sys)
 
 
 if __name__ == "__main__":
@@ -81,5 +79,4 @@ if __name__ == "__main__":
         di = DataInjection()
         di.initiate_data_injection()
     except Exception as e:
-        logging.error(f"❌ Failed to inject data: {e}")
-        sys.exit(1)
+        raise CustomException(e, sys)
