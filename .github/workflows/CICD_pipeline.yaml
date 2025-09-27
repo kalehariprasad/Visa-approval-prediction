@@ -48,7 +48,7 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
         run: |
           echo "▶ Running data injection..."
-          python src/data/data_injection.py || {
+          python -u src/data/data_injection.py || {
             echo "❌ Data injection failed. Printing logs..."
             exit 1
           }
