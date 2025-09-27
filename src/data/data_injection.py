@@ -17,7 +17,7 @@ class DataInjection:
         self.artifact = DataInjectionConfig()
 
     def initiate_data_injection(self):
-        print("[DEBUG] Script started", flush=True)
+        print("[DEBUG] Script started")
         try:
             # Debug: Print MONGO_URI to ensure it's loaded
             mongo_uri = os.getenv("MONGO_CONNECTION_URL")
@@ -25,7 +25,7 @@ class DataInjection:
                 print("[DEBUG] MONGO_CONNECTION_URL is not set")
             else:
                 print(f"[DEBUG] MONGO_URI: {mongo_uri[:8]}********")
-            print("[DEBUG] Connecting to MongoDB...", flush=True)
+            print("[DEBUG] Connecting to MongoDB...")
 
             db = self.mangodb
             data = self.data_handler
