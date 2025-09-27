@@ -45,7 +45,7 @@ jobs:
       # Step 6: Run data injection script with debug
       - name: Run data injection script with debug
         env:
-          MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
+          MONGO_CONNECTION_URL: ${{ secrets.MONGO_CONNECTION_URL }}
         run: |
           echo "▶ Running data injection..."
           python -u src/data/data_injection.py || {
