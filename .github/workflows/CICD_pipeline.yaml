@@ -65,7 +65,14 @@ jobs:
         run: |
           echo "▶ Running data preprocessing..."
           python src/data/data_preprocessing.py
-      # Step 9: Run Model training script
+      # Step 9: Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          AWS_MLFLOw_ACCESS_KEY_ID: ${{ secrets.AWS_MLFLOw_ACCESS_KEY_ID }}
+          AWS_MLFLOw_SECRET_ACCESS_KEY : ${{ secrets.AWS_MLFLOw_SECRET_ACCESS_KEY }}
+          AWS_MLFLOW_REGION: ${{ secrets.AWS_MLFLOW_REGION }}
+      # Step 10: Run Model training script
       - name: Model training
         env:
           MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI  }}
