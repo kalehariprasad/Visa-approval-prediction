@@ -1,5 +1,6 @@
 import pandas as pd
 import sys
+import os
 import mlflow
 from src.logger import logging
 from src.constants import SCHEMA_FILE_PATH
@@ -22,9 +23,11 @@ class Mlflow:
 
     def Model_inference(self):
         try:
-            mlflow.set_tracking_uri(
-                "http://ec2-44-204-17-132.compute-1.amazonaws.com:5000"
-                )
+            tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+            if not tracking_uri:
+                raise CustomException("No MLFLOW_TRACKING_URI in environment", sys)
+            mlflow.set_tracking_uri(tracking_uri)
+            logging.info(f"MLflow tracking URI set to {tracking_uri}")
             model_info = self.mlflow.load_model_info(
                 self.config.model_experiment_info
                 )

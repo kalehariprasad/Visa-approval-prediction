@@ -79,3 +79,24 @@ jobs:
         run: |
           echo "▶ Running Model training..."
           python src/models/model_training.py
+      # Step 11: Run Model register script
+      - name: Model register
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI  }}
+        run: |
+          echo "▶ Running Model register..."
+          python src/models/register_model.py
+      # Step 12: Run Model transaction script
+      - name: Model transaction
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI  }}
+        run: |
+          echo "▶ Running Model transaction..."
+          python src/models/model_transaction.py
+      # Step 12: Run Model transaction script
+      - name: Model inference
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI  }}
+        run: |
+          echo "▶ Running Model inference..."
+          python src/models/model_inference.py
