@@ -52,23 +52,7 @@ jobs:
             echo "❌ Data injection failed. Printing logs..."
             exit 1
           }
-
-      # Step 7: Debug: Check data file outputs
-      - name: Debug Check data file outputs
-        run: |
-          echo "📁 Listing data/raw directory contents:"
-          ls -lR data/raw || echo "❌ 'data/raw' directory not found"
-
-          echo "📄 Checking Easyvisa.csv:"
-          cat data/raw/Easyvisa.csv || echo "❌ Easyvisa.csv not found"
-
-          echo "📄 Checking train.csv:"
-          cat data/raw/train.csv || echo "❌ train.csv not found"
-
-          echo "📄 Checking test.csv:"
-          cat data/raw/test.csv || echo "❌ test.csv not found"
-
-      # Step 8: Run data validation script
+      # Step 7: Run data validation script
       - name: Run data validation script
         env:
           MONGO_URI: ${{ secrets.MONGO_CONNECTION_URL }}
@@ -76,8 +60,15 @@ jobs:
           echo "▶ Running data validation..."
           python src/data/data_validation.py
 
-      # Step 9: Run data preprocessing script
+      # Step 8: Run data preprocessing script
       - name: Run data preprocessing script
         run: |
           echo "▶ Running data preprocessing..."
           python src/data/data_preprocessing.py
+      # Step 9: Run Model training script
+      - name: Model training
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI  }}
+        run: |
+          echo "▶ Running Model training..."
+          python src/models/model_training.py
