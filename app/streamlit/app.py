@@ -8,18 +8,28 @@ from pathlib import Path
 from app.logger import logging
 from app.exception import CustomException
 from app.utils import streamlitutilies
+from src.utils import MLFlowInstance
+from src.configuration.config import ModelConfig
 
 
 utilities = streamlitutilies()
+config = ModelConfig()
+mlflow_instance = MLFlowInstance()
+
+mlflow.set_tracking_uri(
+    "http://ec2-54-242-5-237.compute-1.amazonaws.com:5000/"
+    )
 curr_dir = Path(__file__).resolve()
 home_dir = curr_dir.parents[2]
 models_folder = home_dir / 'models'
-model_path = models_folder / 'model.pkl'
+# model_path = models_folder / 'model.pkl'
 prprocessor_path = models_folder /'preprocessor.pkl'
-
-
-model = utilities.load_object(model_path)
 preprocessor =utilities.load_object(prprocessor_path)
+model_info = mlflow_instance.load_model_info(config.model_experiment_info)
+logging.info('Model info Loaded for model inference')
+model = mlflow_instance.load_model_for_inference(model_info)
+
+
 
 st.title('Visa Approval Prediction')
 
