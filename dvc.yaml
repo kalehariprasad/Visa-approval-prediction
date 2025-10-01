@@ -90,7 +90,7 @@ stages:
 
   model_inference:
 
-    cmd: python src\models\model_inference.py
+    cmd: python src/models/model_inference.py
 
     deps:
       - src/models/model_inference.py
