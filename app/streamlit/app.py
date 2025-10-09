@@ -17,7 +17,7 @@ config = ModelConfig()
 mlflow_instance = MLFlowInstance()
 
 mlflow.set_tracking_uri(
-    "http://ec2-54-242-5-237.compute-1.amazonaws.com:5000/"
+    "http://ec2-54-91-251-35.compute-1.amazonaws.com:5000/"
     )
 curr_dir = Path(__file__).resolve()
 home_dir = curr_dir.parents[2]
