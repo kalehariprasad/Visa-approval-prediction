@@ -43,6 +43,7 @@ TEST_Y = 'test_y.npy'
 
 
 # Model Evauluation
+APP_DIERECTORY = "app"
 MODEL_DIECTORY = "models"
 MODEL = "model.pkl"
 REPORTS_DITECTORY = "reports"

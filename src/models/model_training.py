@@ -9,6 +9,7 @@ from src.configuration.config import DataPreprocessconfig, ModelConfig
 from catboost import CatBoostClassifier
 
 tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+
 if not tracking_uri:
     raise CustomException("No MLFLOW_TRACKING_URI in environment", sys)
 mlflow.set_tracking_uri(tracking_uri)
@@ -71,6 +72,15 @@ class Modeling:
                 object=model,
                 file_path=self.model_config.model_path_loacl
             )
+
+            model_info_path = self.model_config.report_json_app
+            self.model.mlflow.save_model_info(
+                run_id=run_id,
+                model_name=self.model_config.model_name,
+                model_path=self.model_config.model_artifact_path,
+                file_path=model_info_path
+            )
+            logging.info(f"✅ Model info saved to {model_info_path}")
 
             logging.info('Model saved locally.')
             return report

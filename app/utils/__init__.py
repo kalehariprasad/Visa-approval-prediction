@@ -49,4 +49,5 @@ class streamlitutilies:
         except Exception as e:
             logging.error('Error occurred while loading the model for inference: %s', e)
             raise CustomException (e,sys)
+
     

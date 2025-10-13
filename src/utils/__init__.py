@@ -244,24 +244,29 @@ class Model:
 
                 # Save report
                 self.handler.save_json(report_dict,
-                                       self.model_config.repost_json
+                                       self.model_config.report_json
                                        )
                 self.handler.save_txt(report_txt,
-                                      self.model_config.repost_txt
+                                      self.model_config.report_txt
                                       )
 
                 # Log artifacts
-                mlflow.log_artifact(self.model_config.repost_json)
-                mlflow.log_artifact(self.model_config.repost_txt)
+                mlflow.log_artifact(self.model_config.report_json)
+                mlflow.log_artifact(self.model_config.report_txt)
 
                 # Save run info
                 model_name = self.model_config.model_name
                 model_path = self.model_config.model_artifact_path
                 model_info_path = self.model_config.model_experiment_info
+                model_info_app = self.model_config.app_model_experiment_info
                 self.mlflow.save_model_info(run_id=training_run_id,
                                             model_name=model_name,
                                             model_path=model_path,
                                             file_path=model_info_path)
+                self.mlflow.save_model_info(run_id=training_run_id,
+                                            model_name=model_name,
+                                            model_path=model_path,
+                                            file_path=model_info_app)
             return report_dict
         except Exception as e:
             raise CustomException(e, sys)

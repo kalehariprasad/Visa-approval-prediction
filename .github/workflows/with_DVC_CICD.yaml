@@ -3,7 +3,7 @@ name: DVC Pipeline Automation
 on:
   push:
     branches:
-      - main
+      - ops
   pull_request:
     branches:
       - main

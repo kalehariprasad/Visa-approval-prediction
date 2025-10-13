@@ -9,6 +9,7 @@ from src.constants import (
     RAW_TEST_FILE,
     DATA_VALIDATION_FOLDER,
     MODEL_DIECTORY,
+    APP_DIERECTORY,
     DATA_PREPROCESSING_FOLDER,
     PREPROCESSED_TRAIN,
     PREPROCESSED_TEST,
@@ -105,13 +106,25 @@ class ModelConfig:
     model_base_path: str = field(default_factory=lambda: os.path.join(
         os.getcwd(), MODEL_DIECTORY)
     )
-    model_name: str = "KNN_MODEL"
+    app_base_path: str = field(default_factory=lambda: os.path.join(
+        os.getcwd(), APP_DIERECTORY)
+    )
+    model_name: str = "CATBOOST_MODEL"
     model_artifact_path: str = "model"
 
     def __post_init__(self):
-        self.repost_json = os.path.join(self.base_path, MODEL_METRICS_JSON)
-        self.repost_txt = os.path.join(self.base_path, MODEL_METRICS_TXT)
+        self.report_json = os.path.join(self.base_path, MODEL_METRICS_JSON)
+
+        self.report_json_app = os.path.join(self.app_base_path,
+                                            REPORTS_DITECTORY,
+                                            MODEL_METRICS_JSON
+                                            )
+        self.report_txt = os.path.join(self.base_path, MODEL_METRICS_TXT)
+
         self.model_experiment_info = os.path.join(
             self.base_path, MODEL_RUN_INFO
+        )
+        self.app_model_experiment_info = os.path.join(
+            self.app_base_path, REPORTS_DITECTORY, MODEL_RUN_INFO
         )
         self.model_path_loacl = os.path.join(self.model_base_path, MODEL)
