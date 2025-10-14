@@ -20,7 +20,8 @@ class MongoDBClient:
     def __init__(self, database_name=DB_NAME) -> None:
         try:
             if MongoDBClient.client is None:
-                CONNECTION_URL = os.getenv("MONGO_CONNECTION_URL")
+                # CONNECTION_URL = os.getenv("MONGO_CONNECTION_URL")
+                CONNECTION_URL = ("mongodb+srv://hariprasad9693:bSw2MFORkyusvdN8@cluster0.jnoviod.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
                 if not CONNECTION_URL:
                     raise Exception("MongoDB connection string"
                                     "(MONGO_CONNECTION_URL) "
