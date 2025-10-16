@@ -103,6 +103,8 @@ logs/
 /mlruns
 
 # reports
+reports/
+
 
 
 

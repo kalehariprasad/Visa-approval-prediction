@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 import mlflow.sklearn
 import mlflow.pyfunc
 import yaml
@@ -263,10 +264,9 @@ class Model:
                                             model_name=model_name,
                                             model_path=model_path,
                                             file_path=model_info_path)
-                self.mlflow.save_model_info(run_id=training_run_id,
-                                            model_name=model_name,
-                                            model_path=model_path,
-                                            file_path=model_info_app)
+                os.makedirs(os.path.dirname(model_info_app), exist_ok=True)
+                shutil.copy(model_info_path, model_info_app)
+                logging.info(f"Copied model info to {model_info_app}")
             return report_dict
         except Exception as e:
             raise CustomException(e, sys)
