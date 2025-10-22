@@ -13,8 +13,6 @@ from app.utils import streamlitutilies
 
 utilities = streamlitutilies()
 tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
-if not tracking_uri:
-   raise CustomException("No MLFLOW_TRACKING_URI in environment", sys)
 mlflow.set_tracking_uri(tracking_uri)
 
 curr_dir = Path(__file__).resolve()
