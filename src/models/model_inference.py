@@ -28,7 +28,8 @@ class Mlflow:
                 raise CustomException(
                     "No MLFLOW_TRACKING_URI in environment",
                     sys
-                    )
+                )
+
             mlflow.set_tracking_uri(tracking_uri)
             logging.info(f"MLflow tracking URI set to {tracking_uri}")
             model_info = self.mlflow.load_model_info(
