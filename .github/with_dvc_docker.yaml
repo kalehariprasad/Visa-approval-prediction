@@ -75,6 +75,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_MLFLOW_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_MLFLOW_REGION }}
 
+      - name: Check if Docker username secret exists
+        if: ${{ secrets.DOCKERHUB_USERNAME == '' }}
+        run: |
+         echo "❌ DOCKERHUB_USERNAME is empty!"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+
       # Step 2: Build Docker image
       - name: Build Docker Image
         env:
