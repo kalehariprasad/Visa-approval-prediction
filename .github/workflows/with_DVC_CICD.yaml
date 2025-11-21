@@ -125,4 +125,10 @@ jobs:
             docker rm my_app || true
 
             echo "▶ Running new container..."
-            docker run -d --name my_app -e MLFLOW_TRACKING_URI="${{ secrets.MLFLOW_TRACKING_URI }}" -p 8501:8501 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+            docker run -d --name my_app \
+            -e MLFLOW_TRACKING_URI="${{ secrets.MLFLOW_TRACKING_URI }}" \
+            -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_MLFLOW_ACCESS_KEY_ID }}" \
+            -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_MLFLOW_SECRET_ACCESS_KEY }}" \
+            -e AWS_DEFAULT_REGION="${{ secrets.AWS_MLFLOW_REGION }}" \
+            -p 8501:8501 \
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
