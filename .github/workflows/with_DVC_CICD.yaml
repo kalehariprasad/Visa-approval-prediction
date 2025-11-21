@@ -59,7 +59,7 @@ jobs:
           echo "▶ Running DVC pipeline ..."
           dvc repro
 
-  docker-build:  # ✅ 
+  Docker-build:  # ✅ 
     runs-on: ubuntu-latest
     needs: lint-and-check   # ensures DVC pipeline passes first
 
@@ -94,3 +94,34 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
 
+  Docker-run:
+  runs-on: ubuntu-latest
+  needs: Docker-build  
+
+  steps:
+    - name: Configure AWS credentials for MLFlow
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_MLFLOW_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_MLFLOW_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_MLFLOW_REGION }}
+
+    - name: SSH into EC2 & deploy Docker container
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.DOCKER_EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.DOCKER_SSH_KEY }}
+        script: |
+          echo "▶ Logging into Docker Hub..."
+          docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_TOKEN }}"
+
+          echo "▶ Pulling latest image..."
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+
+          echo "▶ Stopping existing container if exists..."
+          docker stop my_app || true
+          docker rm my_app || true
+
+          echo "▶ Running new container..."
+          docker run -d --name my_app -e MLFLOW_TRACKING_URI="${{ secrets.MLFLOW_TRACKING_URI }}" -p 8501:8501 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
