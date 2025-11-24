@@ -15,6 +15,7 @@ COPY app/ ./app/
 COPY src/ ./src/
 COPY models/model.pkl ./models/model.pkl
 COPY models/preprocessor.pkl ./models/preprocessor.pkl
+COPY app/reports ./app/reports
 
 # Expose Streamlit port
 EXPOSE 8501
