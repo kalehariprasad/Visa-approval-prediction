@@ -40,13 +40,13 @@ class Modeling:
                 'border_count': 64,
             }
 
-            trained_model,run_id = self.model.train_model(
+            trained_model, run_id = self.model.train_model(
                 model_class=model_class,
                 train_x=train_x,
                 train_y=train_y,
                 params=params
             )
-            return trained_model,run_id 
+            return trained_model, run_id
         except Exception as e:
             raise CustomException(e, sys)
 
