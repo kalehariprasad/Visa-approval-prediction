@@ -57,7 +57,14 @@ jobs:
           MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
         run: |
           echo "▶ Running DVC pipeline ..."
-          dvc repro
+          dvc repro 
+      - name: Upload DVC & model artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-artifacts
+          path: |
+            models/
+            app/reports/
 
   Docker-build:  # ✅ 
     runs-on: ubuntu-latest
@@ -66,6 +73,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: pipeline-artifacts
+          path: .
 
       # Step 1: Configure AWS credentials
       - name: Configure AWS credentials
@@ -80,6 +93,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
+      
 
       # Step 2: Build Docker image
       - name: Build Docker Image
