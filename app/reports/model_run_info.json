@@ -1,6 +1,0 @@
-{
-    "run_id": "f28990a1c86a4a6e86a5dac2db782398",
-    "model_path": "model",
-    "model_uri": "runs:/f28990a1c86a4a6e86a5dac2db782398/model",
-    "model_name": "CATBOOST_MODEL"
-}
