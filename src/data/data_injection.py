@@ -19,7 +19,8 @@ class DataInjection:
         print("[DEBUG] Script started")
         try:
             # Debug: Print MONGO_URI to ensure it's loaded
-            mongo_uri = os.getenv("MONGO_CONNECTION_URL")
+            #mongo_uri = os.getenv("MONGO_CONNECTION_URL")
+            mongo_uri = os.getenv('connection_string')
             if mongo_uri is None:
                 print("[DEBUG] MONGO_CONNECTION_URL is not set")
             else:
