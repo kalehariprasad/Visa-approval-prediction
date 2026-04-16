@@ -195,17 +195,7 @@ class Model:
                 # Log hyperparameters
                 for key, value in params.items():
                     mlflow.log_param(key, value)
-
-                # Infer model input/output signature
-                predictions = model.predict(train_x)
-                signature = infer_signature(train_x, predictions)
-                # Log the trained model
-                input_example = (
-                                    train_x.iloc[:5]
-                                    if hasattr(train_x, "iloc")
-                                    else train_x[:5]
-                                )
-
+                training_run_id = run.info.run_id
 
             return model, training_run_id
         except Exception as e:
@@ -231,11 +221,15 @@ class Model:
                     'roc_auc': roc_auc
                 })
                 if acc > 0.8:
-                    logging.info("Model passed evaluation. Logging model...")
-
+                    logging.info(
+                        "Model passed evaluation. "
+                        "Logging model..."
+                    )
                     signature = infer_signature(test_x, predicted)
                     input_example = (
-                        test_x.iloc[:5] if hasattr(test_x, "iloc") else test_x[:5]
+                        test_x.iloc[:5]
+                        if hasattr(test_x, "iloc")
+                        else test_x[:5]
                     )
 
                     mlflow.sklearn.log_model(
@@ -244,16 +238,13 @@ class Model:
                         signature=signature,
                         input_example=input_example
                     )
-
-                    # Save model info AFTER logging
-                    self.mlflow.save_model_info(
-                        run_id=mlflow.active_run().info.run_id,
-                        model_name=model_name,
-                        model_path=model_path,
-                        file_path=model_info_path
-                    )
                 else:
-                    logging.warning("Model did not meet performance threshold. Not logging.")
+                    logging.warning(
+                        "Model did not meet performance threshold"
+                        "(accuracy=%.3f)."
+                        "Not logging.",
+                        acc,
+                    )
 
                 # Classification report
                 report_dict = classification_report(test_y,
