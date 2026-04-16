@@ -205,13 +205,7 @@ class Model:
                                     if hasattr(train_x, "iloc")
                                     else train_x[:5]
                                 )
-                mlflow.sklearn.log_model(
-                    sk_model=model,
-                    artifact_path="model",
-                    signature=signature,
-                    input_example=input_example
-                )
-                training_run_id = run.info.run_id
+
 
             return model, training_run_id
         except Exception as e:
@@ -236,6 +230,30 @@ class Model:
                     'recall': recall,
                     'roc_auc': roc_auc
                 })
+                if acc > 0.8:
+                    logging.info("Model passed evaluation. Logging model...")
+
+                    signature = infer_signature(test_x, predicted)
+                    input_example = (
+                        test_x.iloc[:5] if hasattr(test_x, "iloc") else test_x[:5]
+                    )
+
+                    mlflow.sklearn.log_model(
+                        sk_model=model,
+                        artifact_path="model",
+                        signature=signature,
+                        input_example=input_example
+                    )
+
+                    # Save model info AFTER logging
+                    self.mlflow.save_model_info(
+                        run_id=mlflow.active_run().info.run_id,
+                        model_name=model_name,
+                        model_path=model_path,
+                        file_path=model_info_path
+                    )
+                else:
+                    logging.warning("Model did not meet performance threshold. Not logging.")
 
                 # Classification report
                 report_dict = classification_report(test_y,
