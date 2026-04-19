@@ -222,7 +222,9 @@ class Model:
                     roc_auc = roc_auc_score(test_y, predicted)
 
                 # Always compute classification report
-                report_dict = classification_report(test_y, predicted, output_dict=True)
+                report_dict = classification_report(
+                    test_y, predicted, output_dict=True
+                    )
                 report_txt = classification_report(test_y, predicted)
 
                 # Log metrics
@@ -269,8 +271,9 @@ class Model:
                     model_name = self.model_config.model_name
                     model_path = self.model_config.model_artifact_path
                     model_info_path = self.model_config.model_experiment_info
-                    model_info_app = self.model_config.app_model_experiment_info
-
+                    model_info_app = (
+                        self.model_config.app_model_experiment_info
+                    )
                     self.mlflow.save_model_info(
                         run_id=training_run_id,
                         model_name=model_name,
@@ -285,7 +288,8 @@ class Model:
 
                 else:
                     logging.warning(
-                        "Model did not meet performance threshold (accuracy=%.3f). Not logging.",
+                        "Model did not meet performance threshold"
+                        "(accuracy=%.3f). Not logging.",
                         acc,
                     )
 
@@ -293,6 +297,7 @@ class Model:
 
         except Exception as e:
             raise CustomException(e, sys)
+
 
 class MLFlowInstance:
     def __init__(self):
