@@ -301,6 +301,7 @@ class MLFlowInstance:
     ) -> None:
         """Save the model run ID, path, URI, and name to a JSON file."""
         try:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
             model_uri = f"runs:/{run_id}/{model_path}"
             model_info = {
                 'run_id': run_id,
@@ -308,7 +309,6 @@ class MLFlowInstance:
                 'model_uri': model_uri,
                 'model_name': model_name
             }
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
             with open(file_path, 'w') as file:
                 json.dump(model_info, file, indent=4)
             logging.info(f"Model info saved to {file_path}")
