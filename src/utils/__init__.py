@@ -203,14 +203,27 @@ class Model:
 
     def evaluate_model(self, model, test_x, test_y, training_run_id):
         try:
-
             with mlflow.start_run(run_name='model_evaluation'):
+
+                # Predictions
                 predicted = model.predict(test_x)
+
+                # Metrics
                 acc = accuracy_score(test_y, predicted)
                 f1 = f1_score(test_y, predicted)
                 precision = precision_score(test_y, predicted)
                 recall = recall_score(test_y, predicted)
-                roc_auc = roc_auc_score(test_y, predicted)
+
+                # Use probabilities for ROC-AUC if available
+                if hasattr(model, "predict_proba"):
+                    probs = model.predict_proba(test_x)[:, 1]
+                    roc_auc = roc_auc_score(test_y, probs)
+                else:
+                    roc_auc = roc_auc_score(test_y, predicted)
+
+                # Always compute classification report
+                report_dict = classification_report(test_y, predicted, output_dict=True)
+                report_txt = classification_report(test_y, predicted)
 
                 # Log metrics
                 mlflow.log_metrics({
@@ -220,11 +233,10 @@ class Model:
                     'recall': recall,
                     'roc_auc': roc_auc
                 })
+
                 if acc > 0.8:
-                    logging.info(
-                        "Model passed evaluation. "
-                        "Logging model..."
-                    )
+                    logging.info("Model passed evaluation. Logging model...")
+
                     signature = infer_signature(test_x, predicted)
                     input_example = (
                         test_x.iloc[:5]
@@ -238,48 +250,49 @@ class Model:
                         signature=signature,
                         input_example=input_example
                     )
+
+                    # Save reports
+                    self.handler.save_json(
+                        report_dict,
+                        self.model_config.report_json
+                    )
+                    self.handler.save_txt(
+                        report_txt,
+                        self.model_config.report_txt
+                    )
+
+                    # Log artifacts
+                    mlflow.log_artifact(self.model_config.report_json)
+                    mlflow.log_artifact(self.model_config.report_txt)
+
+                    # Save run info
+                    model_name = self.model_config.model_name
+                    model_path = self.model_config.model_artifact_path
+                    model_info_path = self.model_config.model_experiment_info
+                    model_info_app = self.model_config.app_model_experiment_info
+
+                    self.mlflow.save_model_info(
+                        run_id=training_run_id,
+                        model_name=model_name,
+                        model_path=model_path,
+                        file_path=model_info_path
+                    )
+
+                    os.makedirs(os.path.dirname(model_info_app), exist_ok=True)
+                    shutil.copy(model_info_path, model_info_app)
+
+                    logging.info(f"Copied model info to {model_info_app}")
+
                 else:
                     logging.warning(
-                        "Model did not meet performance threshold"
-                        "(accuracy=%.3f)."
-                        "Not logging.",
+                        "Model did not meet performance threshold (accuracy=%.3f). Not logging.",
                         acc,
                     )
 
-                # Classification report
-                report_dict = classification_report(test_y,
-                                                    predicted, output_dict=True
-                                                    )
-                report_txt = classification_report(test_y, predicted)
-
-                # Save report
-                self.handler.save_json(report_dict,
-                                       self.model_config.report_json
-                                       )
-                self.handler.save_txt(report_txt,
-                                      self.model_config.report_txt
-                                      )
-
-                # Log artifacts
-                mlflow.log_artifact(self.model_config.report_json)
-                mlflow.log_artifact(self.model_config.report_txt)
-
-                # Save run info
-                model_name = self.model_config.model_name
-                model_path = self.model_config.model_artifact_path
-                model_info_path = self.model_config.model_experiment_info
-                model_info_app = self.model_config.app_model_experiment_info
-                self.mlflow.save_model_info(run_id=training_run_id,
-                                            model_name=model_name,
-                                            model_path=model_path,
-                                            file_path=model_info_path)
-                os.makedirs(os.path.dirname(model_info_app), exist_ok=True)
-                shutil.copy(model_info_path, model_info_app)
-                logging.info(f"Copied model info to {model_info_app}")
             return report_dict
+
         except Exception as e:
             raise CustomException(e, sys)
-
 
 class MLFlowInstance:
     def __init__(self):
