@@ -144,13 +144,13 @@ stages:
       size: 568
     - path: src/models/model_training.py
       hash: md5
-      md5: 9d57c485be1ddb256c0bd0f53efa5958
-      size: 3115
+      md5: 6b547588a72dcc632c53af229a32cd86
+      size: 3042
     outs:
     - path: reports/
       hash: md5
-      md5: 53ecd82e288b1d766015697093947697.dir
-      size: 1251
+      md5: 7e04a9557fba7c8d0466842faa61b034.dir
+      size: 1252
       nfiles: 3
   register_model:
     cmd: python src/models/register_model.py

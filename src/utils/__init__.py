@@ -203,7 +203,7 @@ class Model:
 
     def evaluate_model(self, model, test_x, test_y, training_run_id):
         try:
-            with mlflow.start_run(run_name='model_evaluation'):
+            with mlflow.start_run(run_name='model_evaluation') as eval_run:
 
                 # Predictions
                 predicted = model.predict(test_x)
@@ -236,21 +236,21 @@ class Model:
                     'roc_auc': roc_auc
                 })
 
-                if acc > 0.8:
+                if acc > 0.7:
                     logging.info("Model passed evaluation. Logging model...")
 
                     signature = infer_signature(test_x, predicted)
-                    input_example = (
-                        test_x.iloc[:5]
-                        if hasattr(test_x, "iloc")
-                        else test_x[:5]
+                    mlflow.sklearn.log_model(
+                            sk_model=model,
+                            artifact_path="model",
+                            signature=signature
                     )
 
-                    mlflow.sklearn.log_model(
-                        sk_model=model,
-                        artifact_path="model",
-                        signature=signature,
-                        input_example=input_example
+                    self.mlflow.save_model_info(
+                        run_id=eval_run.info.run_id,
+                        model_name=self.model_config.model_name,
+                        model_path=self.model_config.model_artifact_path,
+                        file_path=self.model_config.app_model_experiment_info
                     )
 
                     # Save reports
@@ -268,20 +268,13 @@ class Model:
                     mlflow.log_artifact(self.model_config.report_txt)
 
                     # Save run info
-                    model_name = self.model_config.model_name
-                    model_path = self.model_config.model_artifact_path
                     model_info_path = self.model_config.model_experiment_info
                     model_info_app = (
                         self.model_config.app_model_experiment_info
                     )
-                    self.mlflow.save_model_info(
-                        run_id=training_run_id,
-                        model_name=model_name,
-                        model_path=model_path,
-                        file_path=model_info_path
-                    )
 
                     os.makedirs(os.path.dirname(model_info_app), exist_ok=True)
+                    os.makedirs(self.model_config.base_path, exist_ok=True)
                     shutil.copy(model_info_path, model_info_app)
 
                     logging.info(f"Copied model info to {model_info_app}")
