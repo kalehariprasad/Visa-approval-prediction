@@ -266,12 +266,14 @@ class Model:
                     )
                     os.makedirs(os.path.dirname(model_info_app), exist_ok=True)
                     os.makedirs(self.model_config.base_path, exist_ok=True)
-                    self.mlflow.save_model_info(
-                        run_id=eval_run.info.run_id,
-                        model_name=self.model_config.model_name,
-                        model_path=self.model_config.model_artifact_path,
-                        file_path=self.model_config.app_model_experiment_info
-                    )
+                    model_name = self.model_config.model_name
+                    model_path = self.model_config.model_artifact_path
+                    model_info_path = self.model_config.model_experiment_info
+                    run_id = eval_run.info.run_id
+                    self.mlflow.save_model_info(run_id=run_id,
+                                                model_name=model_name,
+                                                model_path=model_path,
+                                                file_path=model_info_path)
                     shutil.copy(model_info_path, model_info_app)
 
                     logging.info(f"Copied model info to {model_info_app}")
