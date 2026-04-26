@@ -4,5 +4,5 @@ mlflow_skinny==3.1.0
 pandas==2.3.1
 streamlit
 xgboost
-catboost
+catboost==1.2.5
 boto3
